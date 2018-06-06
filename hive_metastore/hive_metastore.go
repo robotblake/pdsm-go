@@ -17328,17 +17328,17 @@ type DropPartitionsRequest struct {
 	TblName            string              `thrift:"tblName,2,required" db:"tblName" json:"tblName"`
 	Parts              *RequestPartsSpec   `thrift:"parts,3,required" db:"parts" json:"parts"`
 	DeleteData         *bool               `thrift:"deleteData,4" db:"deleteData" json:"deleteData,omitempty"`
-	IfExists           bool                `thrift:"ifExists,5" db:"ifExists" json:"ifExists,omitempty"`
+	IfExists           *bool               `thrift:"ifExists,5" db:"ifExists" json:"ifExists,omitempty"`
 	IgnoreProtection   *bool               `thrift:"ignoreProtection,6" db:"ignoreProtection" json:"ignoreProtection,omitempty"`
 	EnvironmentContext *EnvironmentContext `thrift:"environmentContext,7" db:"environmentContext" json:"environmentContext,omitempty"`
-	NeedResult_        bool                `thrift:"needResult,8" db:"needResult" json:"needResult,omitempty"`
+	NeedResult_        *bool               `thrift:"needResult,8" db:"needResult" json:"needResult,omitempty"`
 }
 
 func NewDropPartitionsRequest() *DropPartitionsRequest {
 	return &DropPartitionsRequest{
-		IfExists: true,
+		IfExists: &DropPartitionsRequest_IfExists_DEFAULT,
 
-		NeedResult_: true,
+		NeedResult_: &DropPartitionsRequest_NeedResult__DEFAULT,
 	}
 }
 
@@ -17371,7 +17371,10 @@ func (p *DropPartitionsRequest) GetDeleteData() bool {
 var DropPartitionsRequest_IfExists_DEFAULT bool = true
 
 func (p *DropPartitionsRequest) GetIfExists() bool {
-	return p.IfExists
+	if !p.IsSetIfExists() {
+		return DropPartitionsRequest_IfExists_DEFAULT
+	}
+	return *p.IfExists
 }
 
 var DropPartitionsRequest_IgnoreProtection_DEFAULT bool
@@ -17395,8 +17398,12 @@ func (p *DropPartitionsRequest) GetEnvironmentContext() *EnvironmentContext {
 var DropPartitionsRequest_NeedResult__DEFAULT bool = true
 
 func (p *DropPartitionsRequest) GetNeedResult_() bool {
-	return p.NeedResult_
+	if !p.IsSetNeedResult_() {
+		return DropPartitionsRequest_NeedResult__DEFAULT
+	}
+	return *p.NeedResult_
 }
+
 func (p *DropPartitionsRequest) IsSetParts() bool {
 	return p.Parts != nil
 }
@@ -17406,7 +17413,7 @@ func (p *DropPartitionsRequest) IsSetDeleteData() bool {
 }
 
 func (p *DropPartitionsRequest) IsSetIfExists() bool {
-	return p.IfExists != DropPartitionsRequest_IfExists_DEFAULT
+	return p.IfExists != nil
 }
 
 func (p *DropPartitionsRequest) IsSetIgnoreProtection() bool {
@@ -17418,7 +17425,7 @@ func (p *DropPartitionsRequest) IsSetEnvironmentContext() bool {
 }
 
 func (p *DropPartitionsRequest) IsSetNeedResult_() bool {
-	return p.NeedResult_ != DropPartitionsRequest_NeedResult__DEFAULT
+	return p.NeedResult_ != nil
 }
 
 func (p *DropPartitionsRequest) Read(iprot thrift.TProtocol) error {
@@ -17585,7 +17592,7 @@ func (p *DropPartitionsRequest) ReadField5(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadBool(); err != nil {
 		return thrift.PrependError("error reading field 5: ", err)
 	} else {
-		p.IfExists = v
+		p.IfExists = &v
 	}
 	return nil
 }
@@ -17611,7 +17618,7 @@ func (p *DropPartitionsRequest) ReadField8(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadBool(); err != nil {
 		return thrift.PrependError("error reading field 8: ", err)
 	} else {
-		p.NeedResult_ = v
+		p.NeedResult_ = &v
 	}
 	return nil
 }
@@ -17714,7 +17721,7 @@ func (p *DropPartitionsRequest) writeField5(oprot thrift.TProtocol) (err error) 
 		if err := oprot.WriteFieldBegin("ifExists", thrift.BOOL, 5); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:ifExists: ", p), err)
 		}
-		if err := oprot.WriteBool(bool(p.IfExists)); err != nil {
+		if err := oprot.WriteBool(bool(*p.IfExists)); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T.ifExists (5) field write error: ", p), err)
 		}
 		if err := oprot.WriteFieldEnd(); err != nil {
@@ -17759,7 +17766,7 @@ func (p *DropPartitionsRequest) writeField8(oprot thrift.TProtocol) (err error) 
 		if err := oprot.WriteFieldBegin("needResult", thrift.BOOL, 8); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T write field begin error 8:needResult: ", p), err)
 		}
-		if err := oprot.WriteBool(bool(p.NeedResult_)); err != nil {
+		if err := oprot.WriteBool(bool(*p.NeedResult_)); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T.needResult (8) field write error: ", p), err)
 		}
 		if err := oprot.WriteFieldEnd(); err != nil {
@@ -61090,9 +61097,9 @@ func (p *ThriftHiveMetastoreDropPartitionsReqArgs) Read(iprot thrift.TProtocol) 
 
 func (p *ThriftHiveMetastoreDropPartitionsReqArgs) ReadField1(iprot thrift.TProtocol) error {
 	p.Req = &DropPartitionsRequest{
-		IfExists: true,
+		IfExists:    &DropPartitionsRequest_IfExists_DEFAULT,
 
-		NeedResult_: true,
+		NeedResult_: &DropPartitionsRequest_NeedResult__DEFAULT,
 	}
 	if err := p.Req.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Req), err)
