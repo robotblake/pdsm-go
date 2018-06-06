@@ -13,7 +13,7 @@ import (
 
 	"github.com/apache/thrift/lib/go/thrift"
 
-	"github.com/robotblake/pdsm-go/fb303"
+	"github.com/robotblake/pdsm-go/internal/fb303"
 )
 
 // (needed to ensure safety because of naive import list construction.)
